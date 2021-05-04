@@ -1,0 +1,62 @@
+%%
+%
+%Two countries, one vaccine
+%%
+tspan = 0:0.1:365;
+
+S10 = 0.995;
+I10 = 0.005;
+R10 = 0;
+St10 = 0; % from 1 travelling in 2
+It10 = 0;
+Rt10 = 0;
+D10 = 0;
+V10 = 0; %percent of individuals vaccinated
+I1net0 = 0; %total infections
+S20 = 0.995;
+I20 = 0.005;
+R20 = 0;
+St20 = 0; % from 2 travelling in 1
+It20 = 0;
+Rt20 = 0;
+D20 = 0;
+V20 = 0; %percent of individuals vaccinated
+I2net0 = 0; %total infections
+Inet0 = I1net0 + I2net0;
+
+x0 = [S10; I10; R10; St10; It10; Rt10; D10; V10; I1net0; S20; I20; R20; St20; It20; Rt20; D20; V20; I2net0; Inet0];
+
+infect = 0.08; % infection rate
+recov = 1/14; % recovery rate
+noImm = 1/60; % natural immunity wear off rate
+Veff = 0.9; % V efficacy
+lambda1 = 0.01; %Vaccinated per day
+lambda2 = 0; %Vaccinated per day
+trav = 0.025; %travel per day
+pReturn = 0.1; %return chance
+mort = 0.018/14;
+% chance to return to S or I?
+
+parms=[infect; recov; noImm; Veff; lambda1; lambda2; trav; pReturn; mort];
+
+%%
+
+[~,X]=ode23(@(t,x) twoCountriesODE(t,x,parms),tspan,x0);
+
+X1 = X(:,1:9);
+X2 = X(:,10:18);
+
+X1(3650,9)
+X1(3650,7)
+X2(3650,9)
+X2(3650,7)
+X(3650,19)
+
+figure(1);
+set(gcf,'color','white')
+plot(tspan,X2)
+%plot(tspan,X2)
+%leg=legend('Susceptible','Infected','Recovered','Vaccinated','Inet');
+set(gca,'fontsize',16)
+xlabel('Time')
+ylabel('Population')
