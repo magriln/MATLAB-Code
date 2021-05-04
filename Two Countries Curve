@@ -1,0 +1,11 @@
+function vdot = vaccineCurve(t,lambda)
+
+vtemp = lambda*t;
+
+if (vtemp < 0) || (vtemp > 1)
+    vdot = 0;
+else
+    vdot = lambda;
+end
+
+end
