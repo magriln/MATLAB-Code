@@ -1,0 +1,35 @@
+%%
+%
+%All vaccinated
+%%
+tspan = 0:0.1:200;
+
+S0 = 0.98;
+I0 = 0.02;
+R0 = 0;
+V0 = 1; %percent of individuals vaccinated
+Inet0 = 0; %total infections
+
+x0 = [S0; I0; R0; V0; Inet0];
+
+infect = 0.1; % infection rate
+recov = 0.05; % recovery rate
+noImm = 0.01; % natural immunity wear off rate
+Veff = 0.8; % V efficacy
+lambda = 0; %Vaccinated per day
+% chance to return to S or I?
+
+parms=[infect; recov; noImm; Veff; lambda];
+
+%%
+
+[~,X]=ode23(@(t,x) oneVaccineFinalODE(t,x,parms),tspan,x0);
+
+
+figure(1);
+set(gcf,'color','white')
+plot(tspan,X)
+leg=legend('Susceptible','Infected','Recovered','Vaccinated','Inet');
+set(gca,'fontsize',16)
+xlabel('Time')
+ylabel('Population')
