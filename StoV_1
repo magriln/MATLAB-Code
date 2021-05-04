@@ -1,0 +1,7 @@
+function delta = StoV_1(S,t)
+
+lambda = 0.1; %per capita vaccination rate
+
+delta = lambda*S;
+
+end
