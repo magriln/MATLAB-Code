@@ -1,0 +1,44 @@
+%%
+%
+%VSIR model: one vaccine
+%
+%Assumptions
+% - System of conservative, i.e. S+I+R+V = 1 at all times
+% - Vaccines give partial resistance to the vaccine, reducing the infection
+%       parameter
+% - Recovered individuals are given complete immunity
+%%
+tspan = 0:0.1:200;
+
+S0 = 0.98;
+I0 = 0.02;
+R0 = 0;
+V0 = 0;
+
+x0 = [S0; I0; R0; V0];
+
+%not sure why not working
+% Inet0 = 0; measures cumulative infections
+% Vnet0 = 0; measures cumulative vaccinations
+
+%x0 = [S0; I0; R0; V0; Inet0; Vnet0];
+
+infect = 0.2; % infection rate
+recov = 0.05; % recovery rate
+Veff = 0.5; % vaccine efficacy rate
+% chance to return to S or I?
+
+parms=[infect; recov; Veff];
+
+%%
+
+[~,X]=ode23(@(t,x) oneVaccineODE(t,x,parms),tspan,x0);
+
+
+figure(1);
+set(gcf,'color','white')
+plot(tspan,X)
+leg=legend('Susceptible','Infected','Recovered','Vaccinated');
+set(gca,'fontsize',16)
+xlabel('Time')
+ylabel('Population')
